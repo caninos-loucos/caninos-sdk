@@ -23,8 +23,8 @@ gpio_mappings["64-v3.1"] = {
 class GPIO:
     pin: int
     board: any = field(repr=False)
-    group: str = field(default=None, repr=False)
-    offset: int = field(default=None, repr=False)
+    chip_id: str = field(default=None, repr=False)
+    line_id: int = field(default=None, repr=False)
     mode: any = IO.OUTPUT
     alias: str = ""
     address: int = field(default=None, repr=False)
@@ -37,8 +37,8 @@ class GPIO:
         self.gpiod_enable()
 
     def gpiod_enable(self):
-        c = chip(f"/dev/gpiochip{4}")
-        leds = c.get_lines([3])
+        c = chip(f"/dev/gpiochip{0}")
+        leds = c.get_lines([65])
 
         config = line_request()
         config.consumer = "xxx label"
