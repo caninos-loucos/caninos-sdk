@@ -1,11 +1,13 @@
-from typing import List
 from dataclasses import dataclass, field
+from typing import List
 
-class CaninosSDK:
+
+class IO:
     # FIXME: use proper enums
     INPUT = 0
     OUTPUT = 1
     I2C = 2
+
 
 # FIXME: add this to a class
 gpio_mappings = {}
@@ -15,13 +17,14 @@ gpio_mappings["64-v3.1"] = {
     7: "B18",
 }
 
+
 @dataclass
 class GPIO:
     pin: int
     board: any = field(repr=False)
     group: str = field(default=None, repr=False)
     offset: int = field(default=None, repr=False)
-    mode: any = CaninosSDK.OUTPUT
+    mode: any = IO.OUTPUT
     alias: str = ""
     address: int = field(default=None, repr=False)
 
@@ -38,7 +41,7 @@ class GPIO:
 
 
 @dataclass
-class Labrador():
+class Labrador:
     """Configuration for a Labrador board"""
 
     board_version: str = "64-v3.1"
@@ -62,9 +65,8 @@ class Labrador():
         setattr(self, f"{periph.alias}", periph)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     labrador = Labrador("64-v3.1", kernel_version=">=4.19.98")
-    labrador.gpio3.enable(CaninosSDK.OUTPUT, alias="led_status")
+    labrador.gpio3.enable(IO.OUTPUT, alias="led_status")
     print(labrador, "\n")
     labrador.led_status.high()
-
