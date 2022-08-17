@@ -45,4 +45,18 @@ Other notes:
 - should the docs be in English or Portuguese?
 - need to get funding or community help
 
+# Setup
+
+Para habilitar o uso das GPIOs sem sudo, rode esses comandos:
+
+```bash
+sudo chown caninos /dev/gpiochip*
+sudo chmod g+rw /dev/gpiochip*
+```
+
+# Development -- if you are helping build this lib
+
+```bash
+pip3 install poetry
+```
 
