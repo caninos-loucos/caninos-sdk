@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+import time
 
 from labrador_sdk.gpio import GPIO, IO, gpio_mappings
 
@@ -33,4 +34,8 @@ if __name__ == "__main__":
     labrador = Labrador("64-v3.1", kernel_version=">=4.19.98")
     labrador.gpio3.enable(IO.OUTPUT, alias="led_status")
     print(labrador, "\n")
-    labrador.led_status.high()
+    while True:
+        labrador.led_status.high()
+        time.sleep(0.5)
+        labrador.led_status.low()
+        time.sleep(0.5)

@@ -28,6 +28,7 @@ class GPIO:
     mode: any = IO.OUTPUT
     alias: str = ""
     address: int = field(default=None, repr=False)
+    gpiod_pin: any = None
 
     def enable(self, mode, alias="", address=0x0):
         self.mode = mode
@@ -38,14 +39,19 @@ class GPIO:
 
     def gpiod_enable(self):
         c = chip(f"/dev/gpiochip{4}")
-        leds = c.get_lines([3])
-
+        self.gpiod_pin = c.get_lines([3])
         config = line_request()
         config.consumer = "xxx label"
         config.request_type = line_request.DIRECTION_OUTPUT
-
-        leds.request(config)
+        self.gpiod_pin.request(config)
+        print(f"GPIO {self.pin} enabled")
 
     def high(self):
         # FIXME: actually make this toggle the pins
         print(f"Setting pin {self.pin} to high.")
+        self.gpiod_pin.set_values([1])
+
+    def low(self):
+        print(f"Setting pin {self.pin} to low.")
+        self.gpiod_pin.set_values([0])
+
