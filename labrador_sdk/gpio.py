@@ -2,7 +2,7 @@ import logging
 import platform
 from dataclasses import dataclass, field
 
-from gpiod import chip, line_request
+import gpiod
 
 
 class IO:
@@ -15,8 +15,11 @@ class IO:
 
 
 # FIXME: add this to a class
+# TODO: include information about allowed modes for each gpio
 gpio_mappings = {}
 gpio_mappings["64"] = {
+    # 36: ("A28", [IO.INPUT, IO.OUTPUT, IO.I2C]),
+    # 36: {"group": "A28", "allowed_modes": [IO.INPUT, IO.OUTPUT, IO.I2C]},
     36: "A28",
     33: "B0",
     35: "B1",
@@ -77,13 +80,14 @@ class GPIO:
     line_id: int = field(default=None, repr=False)
     mode: any = IO.OUTPUT
     alias: str = ""
-    address: int = field(default=None, repr=False)
     gpiod_pin: any = None
 
-    def enable(self, mode, alias="", address=0x0):
+    def __post_init__(self):
+        self.chip_id, self.line_id = GPIO.get_num(self.pin)
+
+    def enable(self, mode, alias=""):
         self.mode = mode
         self.alias = alias
-        self.address = address
         self.board.register_enabled(self)
         self.gpiod_enable()
 
@@ -91,27 +95,27 @@ class GPIO:
         if platform.machine() == "x86_64":
             logging.debug("Will not enable GPIO in PC.")
             return
-        c = chip(f"/dev/gpiochip{4}")
-        self.gpiod_pin = c.get_lines([3])
-        config = line_request()
+        chip_device = gpiod.chip(f"/dev/gpiochip{self.chip_id}")
+        self.gpiod_pin = chip_device.get_lines([self.line_id])
+        config = gpiod.line_request()
         config.consumer = "xxx label"
-        config.request_type = line_request.DIRECTION_OUTPUT
+        config.request_type = gpiod.line_request.DIRECTION_OUTPUT
         self.gpiod_pin.request(config)
-        print(f"GPIO {self.pin} enabled")
+        logging.info(f"GPIO {self.pin} enabled")
 
     def high(self):
         if platform.machine() == "x86_64":
             logging.debug("Will not enable GPIO in PC.")
             return
         # FIXME: actually make this toggle the pins
-        print(f"Setting pin {self.pin} to high.")
+        logging.debug(f"Setting pin {self.pin} to high.")
         self.gpiod_pin.set_values([1])
 
     def low(self):
         if platform.machine() == "x86_64":
             logging.debug("Will not enable GPIO in PC.")
             return
-        print(f"Setting pin {self.pin} to low.")
+        logging.debug(f"Setting pin {self.pin} to low.")
         self.gpiod_pin.set_values([0])
 
     def get_offset_32bits(group):
