@@ -1,6 +1,6 @@
+import time
 from dataclasses import dataclass, field
 from typing import List
-import time
 
 from labrador_sdk.gpio import GPIO, IO, gpio_mappings
 

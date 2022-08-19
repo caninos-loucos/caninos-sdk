@@ -43,7 +43,7 @@ sudo chmod g+rw /dev/gpiochip*
 
 Install dependencies:
 ```bash
-sudo apt install python3-dev python3-pip python3-setuptools libffi-dev curl
+sudo apt install python3-dev python3-pip python3-setuptools libffi-dev libssl-dev curl
 pip3 install --upgrade pip
 pip3 install poetry
 ```
