@@ -8,7 +8,7 @@ import CaninosSDK as k9
 labrador = k9.Labrador("64-v3.1", kernel_version=">=4.19.98")
 
 # configurações
-labrador.gpio0.enable(k9.OUTPUT, alias="led_status")
+labrador.gpio1.enable(k9.OUTPUT, alias="led_status")
 labrador.gpio2.enable(k9.INPUT, alias="button1")
 labrador.gpio.enable(k9.cpu_pin(0x33), k9.INPUT, alias="button1")
 labrador.gpio.enable(7, k9.I2C, address=0x4, alias="temp_sensor")

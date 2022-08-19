@@ -4,22 +4,12 @@ from dataclasses import dataclass, field
 
 import gpiod
 
-
-class IO:
-    # FIXME: use proper enums
-    INPUT = 0
-    OUTPUT = 1
-    I2C = 2
-    PWM = 3
-    SPI = 4
-
-
 # FIXME: add this to a class
 # TODO: include information about allowed modes for each gpio
 gpio_mappings = {}
 gpio_mappings["64"] = {
-    # 36: ("A28", [IO.INPUT, IO.OUTPUT, IO.I2C]),
-    # 36: {"group": "A28", "allowed_modes": [IO.INPUT, IO.OUTPUT, IO.I2C]},
+    # 36: ("A28", [GPIO.INPUT, GPIO.OUTPUT, GPIO.I2C]),
+    # 36: {"group": "A28", "allowed_modes": [GPIO.INPUT, GPIO.OUTPUT, GPIO.I2C]},
     36: "A28",
     33: "B0",
     35: "B1",
@@ -74,24 +64,43 @@ gpio_mappings["32"] = {
 
 @dataclass
 class GPIO:
+    IO = 0
+    I2C = 1
+    PWM = 2
+    SPI = 3
+
+    class Direction:
+        INPUT = 0
+        OUTPUT = 1
+
     pin: int
     board: any = field(repr=False)
     chip_id: str = field(default=None, repr=False)
     line_id: int = field(default=None, repr=False)
-    mode: any = IO.OUTPUT
+    mode: any = None
     alias: str = ""
     gpiod_pin: any = None
 
     def __post_init__(self):
-        self.chip_id, self.line_id = GPIO.get_num(self.pin)
+        self.chip_id, self.line_id = GPIO.get_num(self.pin, self.board.board_version)
 
-    def enable(self, mode, alias=""):
-        self.mode = mode
+    def enable_io(self, direction, alias=""):
+        assert direction in [GPIO.Direction.INPUT, GPIO.Direction.OUTPUT]
+        self.mode = GPIO.SIMPLE_GPIO
         self.alias = alias
         self.board.register_enabled(self)
-        self.gpiod_enable()
+        self.gpiod_enable_io()
 
-    def gpiod_enable(self):
+    def enable_pwm(self, freq, duty_cycle, alias=""):
+        self.mode = GPIO.PWM
+        self.alias = alias
+        self.board.register_enabled(self)
+        self.gpiod_enable_pwm(freq, duty_cycle)
+
+    def gpiod_enable_pwm(self, freq, duty_cycle):
+        pass
+
+    def gpiod_enable_io(self):
         if platform.machine() == "x86_64":
             logging.debug("Will not enable GPIO in PC.")
             return

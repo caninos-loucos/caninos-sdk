@@ -2,19 +2,19 @@ import time
 from dataclasses import dataclass, field
 from typing import List
 
-from labrador_sdk.gpio import GPIO, IO, gpio_mappings
+from labrador_sdk.gpio import GPIO, gpio_mappings
 
 
 @dataclass
 class Labrador:
     """Configuration for a Labrador board"""
 
-    board_version: str = "64-v3.1"
+    board_version: str = "64"
     kernel_version: str = ">=4.19.98"
     enabled_features: list = field(default_factory=list)
 
     # FIXME: create an enum instead?
-    VERSIONS = ["64-v3.1", "32-v2.0"]
+    VERSIONS = ["64", "32"]
 
     def __post_init__(self):
         if self.board_version not in Labrador.VERSIONS:
@@ -31,8 +31,8 @@ class Labrador:
 
 
 if __name__ == "__main__":
-    labrador = Labrador("64-v3.1", kernel_version=">=4.19.98")
-    labrador.gpio3.enable(IO.OUTPUT, alias="led_status")
+    labrador = Labrador("64", kernel_version=">=4.19.98")
+    labrador.gpio3.enable(GPIO.Direction.OUTPUT, alias="led_status")
     print(labrador, "\n")
     while True:
         labrador.led_status.high()
