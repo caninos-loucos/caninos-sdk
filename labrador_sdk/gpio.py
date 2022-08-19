@@ -86,7 +86,7 @@ class GPIO:
 
     def enable_io(self, direction, alias=""):
         assert direction in [GPIO.Direction.INPUT, GPIO.Direction.OUTPUT]
-        self.mode = GPIO.SIMPLE_GPIO
+        self.mode = GPIO.IO
         self.alias = alias
         self.board.register_enabled(self)
         self.gpiod_enable_io()
@@ -101,7 +101,7 @@ class GPIO:
         pass
 
     def gpiod_enable_io(self):
-        if platform.machine() == "x86_64":
+        if self.board.cpu_architecture == "x86_64":
             logging.debug("Will not enable GPIO in PC.")
             return
         chip_device = gpiod.chip(f"/dev/gpiochip{self.chip_id}")
@@ -113,7 +113,7 @@ class GPIO:
         logging.info(f"GPIO {self.pin} enabled")
 
     def high(self):
-        if platform.machine() == "x86_64":
+        if self.board.cpu_architecture == "x86_64":
             logging.debug("Will not enable GPIO in PC.")
             return
         # FIXME: actually make this toggle the pins
@@ -121,7 +121,7 @@ class GPIO:
         self.gpiod_pin.set_values([1])
 
     def low(self):
-        if platform.machine() == "x86_64":
+        if self.board.cpu_architecture == "x86_64":
             logging.debug("Will not enable GPIO in PC.")
             return
         logging.debug(f"Setting pin {self.pin} to low.")
