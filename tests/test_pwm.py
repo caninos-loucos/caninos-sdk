@@ -1,4 +1,5 @@
-from labrador_sdk.gpio import GPIO,PWM
+from labrador_sdk.gpio import GPIO
+from labrador_sdk.pwm import PWM
 from labrador_sdk.main import Labrador
 
 

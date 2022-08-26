@@ -1,9 +1,9 @@
 import logging
 import platform
 from dataclasses import dataclass, field
+from labrador_sdk.pwm import PWM
 
 import gpiod
-from pwm import PWM
 
 # FIXME: add this to a class
 # TODO: include information about allowed modes for each gpio

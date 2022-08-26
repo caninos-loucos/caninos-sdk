@@ -1,10 +1,12 @@
+import imp
 import logging
 import platform
 import time
 from dataclasses import dataclass, field
 from typing import List
 
-from labrador_sdk.gpio import GPIO, gpio_mappings,PWM
+from labrador_sdk.gpio import GPIO, gpio_mappings
+from labrador_sdk.pwm import PWM
 
 
 @dataclass
