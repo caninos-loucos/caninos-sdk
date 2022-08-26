@@ -1,5 +1,5 @@
 import threading
-import time
+import timeit
 
 class PWM:
     freq = 0
@@ -27,8 +27,22 @@ class PWM:
         self.running = 0
 
     def run(self):
+        state = True
+        self.gpio.high()
+        start = timeit.default_timer()
         while self.running:
-            self.gpio.high()
-            time.sleep(self.period_high)
-            self.gpio.low()
-            time.sleep(self.period_low)
+            passed_time = timeit.default_timer() - start
+            if state:
+                if passed_time >= self.period_high:
+                    self.gpio.low()
+                    state = False
+                    start = timeit.default_timer()
+
+            else:
+                if passed_time >= self.period_low:
+                    self.gpio.high()
+                    state = True
+                    start = timeit.default_timer()
+
+            
+ 
