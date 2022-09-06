@@ -1,4 +1,3 @@
-import imp
 import logging
 import platform
 import time
