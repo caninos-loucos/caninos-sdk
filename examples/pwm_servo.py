@@ -19,7 +19,7 @@ def toDuty(degree):
 frequency = 50
 duty = toDuty(degrees)
 print(duty)
-labrador.gpio5.enable_pwm(alias="motor1", freq=frequency, duty_cycle=duty)
+labrador.gpio11.enable_pwm(alias="motor1", freq=frequency, duty_cycle=duty)
 start = timeit.default_timer()
 passed_time = timeit.default_timer() - start
 labrador.motor1.pwm.start()
