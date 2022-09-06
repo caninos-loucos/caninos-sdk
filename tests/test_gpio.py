@@ -1,4 +1,4 @@
-from labrador_sdk.gpio import GPIO
+from caninos_sdk.gpio import GPIO
 
 
 def test_gpio_pin_32bits():

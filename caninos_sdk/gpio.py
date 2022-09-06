@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from labrador_sdk.pwm import PWM
+from caninos_sdk.pwm import PWM
 import logging, platform
 import gpiod
 

@@ -1,6 +1,6 @@
-from labrador_sdk.gpio import GPIO
-from labrador_sdk.main import Labrador
-from labrador_sdk.pwm import PWM
+from caninos_sdk.gpio import GPIO
+from caninos_sdk.labrador import Labrador
+from caninos_sdk.pwm import PWM
 import time
 
 labrador = Labrador()

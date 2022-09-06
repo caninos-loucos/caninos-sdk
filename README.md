@@ -1,4 +1,4 @@
-# labrador-sdk
+# caninos-sdk
 
 A ideia é fazer com que o uso dos periféricos da Labrador seja **muito acessível**, ao ponto de, um dia, permitir códigos assim:
 

@@ -1,5 +1,5 @@
-from labrador_sdk.gpio import GPIO
-from labrador_sdk.main import Labrador
+from caninos_sdk.gpio import GPIO
+from caninos_sdk.labrador import Labrador
 import sys, timeit
 
 labrador = Labrador()
