@@ -35,14 +35,3 @@ class Labrador:
     def register_enabled(self, periph):
         self.enabled_features.append(periph)
         setattr(self, f"{periph.alias}", periph)
-
-
-if __name__ == "__main__":
-    labrador = Labrador()
-    labrador.gpio3.enable_io(GPIO.Direction.OUTPUT, alias="led_status")
-    print(labrador, "\n")
-    while True:
-        labrador.led_status.high()
-        time.sleep(0.5)
-        labrador.led_status.low()
-        time.sleep(0.5)

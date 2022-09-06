@@ -1,9 +1,10 @@
 import logging
 import platform
 from dataclasses import dataclass, field
-from labrador_sdk.pwm import PWM
 
 import gpiod
+
+from labrador_sdk.pwm import PWM
 
 # FIXME: add this to a class
 # TODO: include information about allowed modes for each gpio
@@ -91,29 +92,31 @@ class GPIO:
         self.mode = GPIO.IO
         self.alias = alias
         self.board.register_enabled(self)
-        self.gpiod_enable_io()
+        self.gpiod_enable_io(direction)
 
     def enable_pwm(self, freq, duty_cycle, alias=""):
         self.mode = GPIO.PWM
         self.alias = alias
         self.board.register_enabled(self)
-        # FIXME: gpiod_enable_io change the direction depending on the mode
-        self.gpiod_enable_io()
+        self.gpiod_enable_io(GPIO.Direction.OUTPUT)
         self.gpiod_enable_pwm(freq, duty_cycle)
 
     def gpiod_enable_pwm(self, freq, duty_cycle):
-        self.pwm = PWM(self,freq, duty_cycle)
+        self.pwm = PWM(self, freq, duty_cycle)
         logging.info(f"PWM enabled")
 
-    def gpiod_enable_io(self):
+    def gpiod_enable_io(self, direction):
         if self.board.cpu_architecture == "x86_64":
             logging.debug("Will not enable GPIO in PC.")
             return
         chip_device = gpiod.chip(f"/dev/gpiochip{self.chip_id}")
         self.gpiod_pin = chip_device.get_lines([self.line_id])
         config = gpiod.line_request()
-        config.consumer = "xxx label"
-        config.request_type = gpiod.line_request.DIRECTION_OUTPUT
+        config.consumer = f"pin {self.pin}"
+        if direction == GPIO.Direction.INPUT:
+            config.request_type = gpiod.line_request.DIRECTION_INPUT
+        elif direction == GPIO.Direction.OUTPUT:
+            config.request_type = gpiod.line_request.DIRECTION_OUTPUT
         self.gpiod_pin.request(config)
         logging.info(f"GPIO {self.pin} enabled")
 
@@ -121,7 +124,6 @@ class GPIO:
         if self.board.cpu_architecture == "x86_64":
             logging.debug("Will not enable GPIO in PC.")
             return
-        # FIXME: actually make this toggle the pins
         logging.debug(f"Setting pin {self.pin} to high.")
         self.gpiod_pin.set_values([1])
 
