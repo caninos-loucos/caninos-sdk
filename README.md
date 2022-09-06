@@ -39,29 +39,19 @@ sudo chmod g+rw /dev/gpiochip*
 ```
 
 
-# Development -- if you are helping to build this lib
+# Contributing
+
+See: https://godatadriven.com/blog/a-practical-guide-to-setuptools-and-pyproject-toml/
 
 Install dependencies:
 ```bash
 sudo apt install python3-dev python3-pip python3-setuptools libffi-dev libssl-dev curl
 pip3 install --upgrade pip
-pip3 install poetry
 ```
 
-Setup the environment:
+To install the package locally in _editable_ form:
 ```bash
- # enable the virtual env
-poetry shell
- # install labrador_sdk in the local env
-poetry install
-# now if you run python3, then `import labrador_sdk`, it should work
-```
-
-To make it available outside poetry's virtual env:
-```bash
-poetry build
-VERSION=0.1.0
-pip3 install  dist/labrador_sdk-$VERSION-py3-none-any.whl
+pip3 install -e .
 ```
 
 ## TO-DO:
@@ -69,7 +59,7 @@ pip3 install  dist/labrador_sdk-$VERSION-py3-none-any.whl
 - [-] make the gpios actually work (read/write)
 - [ ] create default constructors/subclasses for specific boards
 - [ ] create a "VirtualLabrador" class, for tests and remote labs
-- [x] refactor to a proper python package
+- [x] refactor to a proper python package using modern python conventions
 - [-] write unit tests -> works with `pytest -s`
 - [-] gpio read/write work across Labradors 32/64
 - [ ] support pwm
