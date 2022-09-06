@@ -54,6 +54,15 @@ To install the package locally in _editable_ form:
 pip3 install -e .
 ```
 
+## Publish a new version
+Install build deps: `pip3 install build twine`.
+
+```bash
+twine upload -r testpypi dist/* # deploy to https://test.pypi.org/
+twine upload -r dist/* # deploy to https://pypi.org/
+```
+
+
 ## TO-DO:
 - [x] initial sketch to prove the concept
 - [-] make the gpios actually work (read/write)
