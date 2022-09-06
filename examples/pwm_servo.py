@@ -1,8 +1,8 @@
-import sys
-import timeit
-
 from labrador_sdk.gpio import GPIO
 from labrador_sdk.main import Labrador
+import sys, timeit
+
+labrador = Labrador()
 
 if len(sys.argv) < 2:
     raise "Please provide the following parameter: degrees"
@@ -19,7 +19,6 @@ def toDuty(degree):
 frequency = 50
 duty = toDuty(degrees)
 print(duty)
-labrador = Labrador()
 labrador.gpio5.enable_pwm(alias="motor1", freq=frequency, duty_cycle=duty)
 start = timeit.default_timer()
 passed_time = timeit.default_timer() - start

@@ -1,11 +1,11 @@
-import time
-
 from labrador_sdk.gpio import GPIO
 from labrador_sdk.main import Labrador
 from labrador_sdk.pwm import PWM
+import time
 
-labrador = Labrador("64", kernel_version=">=4.19.98")
-labrador.gpio3.enable_pwm(alias="led1", freq=1, duty_cycle=0.5)
+labrador = Labrador()
+labrador.gpio3.enable_pwm(alias="led1", freq=50, duty_cycle=0.1)
+
 labrador.led1.pwm.start()
 time.sleep(3)
 labrador.led1.pwm.stop()

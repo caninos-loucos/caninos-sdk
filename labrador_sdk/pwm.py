@@ -1,5 +1,4 @@
-import threading
-import timeit
+import threading, timeit, logging
 
 
 class PWM:
@@ -17,7 +16,7 @@ class PWM:
         self.duty_cycle = duty_cycle
         self.period_high = duty_cycle / freq
         self.period_low = (1 - duty_cycle) / freq
-        print("Iniciando a thread ")
+        logging.debug("Iniciando a thread ")
 
     def start(self):
         self.thread = threading.Thread(target=self.run)

@@ -1,10 +1,8 @@
-import logging
-import platform
 from dataclasses import dataclass, field
-
+from labrador_sdk.pwm import PWM
+import logging, platform
 import gpiod
 
-from labrador_sdk.pwm import PWM
 
 # FIXME: add this to a class
 # TODO: include information about allowed modes for each gpio
@@ -124,14 +122,16 @@ class GPIO:
         if self.board.cpu_architecture == "x86_64":
             logging.debug("Will not enable GPIO in PC.")
             return
-        logging.debug(f"Setting pin {self.pin} to high.")
+        if self.mode != GPIO.PWM:
+            logging.debug(f"Setting pin {self.pin} to high.")
         self.gpiod_pin.set_values([1])
 
     def low(self):
         if self.board.cpu_architecture == "x86_64":
             logging.debug("Will not enable GPIO in PC.")
             return
-        logging.debug(f"Setting pin {self.pin} to low.")
+        if self.mode != GPIO.PWM:
+            logging.debug(f"Setting pin {self.pin} to low.")
         self.gpiod_pin.set_values([0])
 
     def get_offset_32bits(group):

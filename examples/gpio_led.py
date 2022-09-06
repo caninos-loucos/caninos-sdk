@@ -1,8 +1,8 @@
-import time
-
 from labrador_sdk.gpio import GPIO
 from labrador_sdk.main import Labrador
 from labrador_sdk.pwm import PWM
+import time
+
 
 labrador = Labrador()
 labrador.gpio3.enable_io(GPIO.Direction.OUTPUT, alias="led_status")
