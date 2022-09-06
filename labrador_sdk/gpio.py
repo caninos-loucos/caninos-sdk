@@ -1,6 +1,7 @@
 import logging
 import platform
 from dataclasses import dataclass, field
+from labrador_sdk.pwm import PWM
 
 import gpiod
 
@@ -80,6 +81,7 @@ class GPIO:
     mode: any = None
     alias: str = ""
     gpiod_pin: any = None
+    pwm: any = field(default=None, repr=False)
 
     def __post_init__(self):
         self.chip_id, self.line_id = GPIO.get_num(self.pin, self.board.board_version)
@@ -95,10 +97,13 @@ class GPIO:
         self.mode = GPIO.PWM
         self.alias = alias
         self.board.register_enabled(self)
+        # FIXME: gpiod_enable_io change the direction depending on the mode
+        self.gpiod_enable_io()
         self.gpiod_enable_pwm(freq, duty_cycle)
 
     def gpiod_enable_pwm(self, freq, duty_cycle):
-        pass
+        self.pwm = PWM(self,freq, duty_cycle)
+        logging.info(f"PWM enabled")
 
     def gpiod_enable_io(self):
         if self.board.cpu_architecture == "x86_64":
