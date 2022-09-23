@@ -1,4 +1,4 @@
-from caninos_sdk.gpio import GPIO
+from caninos_sdk.pin import Pin
 from caninos_sdk.labrador import Labrador
 import sys, timeit
 
@@ -19,7 +19,7 @@ def toDuty(degree):
 frequency = 50
 duty = toDuty(degrees)
 print(duty)
-labrador.gpio11.enable_pwm(alias="motor1", freq=frequency, duty_cycle=duty)
+labrador.pin11.enable_pwm(alias="motor1", freq=frequency, duty_cycle=duty)
 start = timeit.default_timer()
 passed_time = timeit.default_timer() - start
 labrador.motor1.pwm.start()
