@@ -1,7 +1,7 @@
-from caninos_sdk.labrador import Labrador
+import caninos_sdk as k9
 import sys, time, cv2
 
-labrador = Labrador()
+labrador = k9.Labrador()
 
 camera_id = int(sys.argv[1]) if len(sys.argv) == 2 else 0
 if not labrador.camera.enable(camera_id):
