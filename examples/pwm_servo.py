@@ -1,4 +1,3 @@
-from caninos_sdk.pin import Pin
 from caninos_sdk.labrador import Labrador
 import sys, timeit
 

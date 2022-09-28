@@ -105,7 +105,7 @@ class Pin:
 
     def gpiod_enable_gpio(self, direction):
         if self.board.cpu_architecture == "x86_64":
-            logging.debug("Will not enable Pin in PC.")
+            logging.debug(f"Skipping pin{self.pin} enable in PC.")
             return
         chip_device = gpiod.chip(f"/dev/gpiochip{self.chip_id}")
         self.gpiod_pin = chip_device.get_lines([self.line_id])
@@ -120,7 +120,7 @@ class Pin:
 
     def high(self):
         if self.board.cpu_architecture == "x86_64":
-            logging.debug("Will not enable Pin in PC.")
+            logging.debug(f"Skipping pin{self.pin} high in PC.")
             return
         if self.mode != Pin.PWM:
             logging.debug(f"Setting pin {self.pin} to high.")
@@ -128,7 +128,7 @@ class Pin:
 
     def low(self):
         if self.board.cpu_architecture == "x86_64":
-            logging.debug("Will not enable Pin in PC.")
+            logging.debug(f"Skipping pin{self.pin} low in PC.")
             return
         if self.mode != Pin.PWM:
             logging.debug(f"Setting pin {self.pin} to low.")

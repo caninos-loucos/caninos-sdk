@@ -1,6 +1,4 @@
-from caninos_sdk.pin import Pin
 from caninos_sdk.labrador import Labrador
-from caninos_sdk.pwm import PWM
 import time
 
 labrador = Labrador()
