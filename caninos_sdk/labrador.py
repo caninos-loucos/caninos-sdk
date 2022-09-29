@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from typing import List
 from caninos_sdk.pin import Pin, gpio_mappings
 from caninos_sdk.pwm import PWM
+from caninos_sdk.camera import Camera
 import logging, platform, time
 
 
@@ -21,6 +22,7 @@ class Labrador:
         self.cpu_architecture = platform.machine()
         self.board_version = platform.architecture()[0][:2]
         self.kernel_version = platform.release()
+        self.camera = Camera(self)
         self._load_pins()
 
     def _load_pins(self):
@@ -29,4 +31,5 @@ class Labrador:
 
     def register_enabled(self, periph):
         self.enabled_features.append(periph)
-        setattr(self, f"{periph.alias}", periph)
+        if hasattr(periph, "alias"):
+            setattr(self, f"{periph.alias}", periph)

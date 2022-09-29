@@ -1,11 +1,9 @@
-from caninos_sdk.pin import Pin
-from caninos_sdk.labrador import Labrador
-from caninos_sdk.pwm import PWM
+import caninos_sdk as k9
 import time
 
 
-labrador = Labrador()
-labrador.pin15.enable_gpio(Pin.Direction.OUTPUT, alias="led_status")
+labrador = k9.Labrador()
+labrador.pin15.enable_gpio(k9.Pin.Direction.OUTPUT, alias="led_status")
 print(labrador, "\n")
 for i in range(0, 6):
     labrador.led_status.high()

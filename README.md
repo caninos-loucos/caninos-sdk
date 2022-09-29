@@ -3,35 +3,35 @@
 A ideia é fazer com que o uso dos periféricos da Labrador seja **muito acessível**, ao ponto de, um dia, permitir códigos assim:
 
 ```python
-import CaninosSDK as k9
+import caninos_sdk as k9
 
-labrador = k9.Labrador("64-v3.1", kernel_version=">=4.19.98")
+# as 4 linhas abaixo já funcionam:
+labrador = k9.Labrador()
+labrador.pin15.enable_gpio(k9.Pin.Direction.OUTPUT, alias="led_status")
+labrador.pin2.enable_gpio(k9.Pin.Direction.INPUT, alias="button1")
+labrador.camera.enable()
 
-# configurações
-labrador.gpio1.enable(k9.OUTPUT, alias="led_status")
-labrador.gpio2.enable(k9.INPUT, alias="button1")
-labrador.gpio.enable(k9.cpu_pin(0x33), k9.INPUT, alias="button1")
-labrador.gpio.enable(7, k9.I2C, address=0x4, alias="temp_sensor")
-
+# as próximas 3 ainda não
+labrador.pin.enable_gpio(k9.cpu_pin(0x33), k9.INPUT, alias="button1")
+labrador.pin.enable_gpio(7, k9.I2C, address=0x4, alias="temp_sensor")
 labrador.wifi.enable("CITI", "1cbe991a14")
-labrador.camera.enable(k9.Webcam)
 
 print(labrador.enabled_features())
 
 # uso
-labrador.led_status.high()
-res = labrador.button1.read()
-value = labrador.temp_sensor.read()
+labrador.led_status.high() # já funciona
+res = labrador.button1.read() # ainda não
+value = labrador.temp_sensor.read() # ainda não
 
-ip = labrador.wifi.get_ip()
-ok, frame = labrador.camera.read()
+ip = labrador.wifi.get_ip() # ainda não
+ok, frame = labrador.camera.read() # já funciona
 ```
 
 # Começando
 
-Por enquanto, pode testar rodando `python3 labrador_sdk/main.py`.
+Pode testar rodando um dos exemplos. Se for usar o gpio: `python3 examples/gpio_led.py`.
 
-Note que, para habilitar o uso das GPIOs sem `sudo`, rode esses comandos (por enquanto precisa rodar toda vez que reinicia a placa):
+Note que, para habilitar o uso das GPIOs sem `sudo`, precisa rodar esses comandos (por enquanto) toda vez que reinicia a placa:
 
 ```bash
 sudo chown caninos /dev/gpiochip*
@@ -65,17 +65,17 @@ twine upload -r dist/* # deploy to https://pypi.org/
 
 ## TO-DO:
 - [x] initial sketch to prove the concept
-- [-] make the gpios actually work (read/write)
-- [ ] create default constructors/subclasses for specific boards
-- [ ] create a "VirtualLabrador" class, for tests and remote labs
+- [x] make the gpios actually work (read/write)
+~~- [ ] create default constructors/subclasses for specific boards~~
+~~- [ ] create a "VirtualLabrador" class, for tests and remote labs~~
 - [x] refactor to a proper python package using modern python conventions
 - [-] write unit tests -> works with `pytest -s`
-- [-] gpio read/write work across Labradors 32/64
-- [ ] support pwm
+- [x] gpio read/write work across Labradors 32/64
+- [x] support pwm
 - [ ] support i2c
 - [ ] support spi
 - [ ] support wifi
-- [ ] support camera
+- [x] support camera
 
 Other notes:
 - should this library support other SBCs?

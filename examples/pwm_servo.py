@@ -1,8 +1,7 @@
-from caninos_sdk.pin import Pin
-from caninos_sdk.labrador import Labrador
+import caninos_sdk as k9
 import sys, timeit
 
-labrador = Labrador()
+labrador = k9.Labrador()
 
 if len(sys.argv) < 2:
     raise "Please provide the following parameter: degrees"
