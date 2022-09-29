@@ -1,4 +1,4 @@
-import cv2, logging, queue, time, threading
+import logging, queue, time, threading
 
 
 class Camera:
@@ -8,16 +8,22 @@ class Camera:
         self.low_fps_mode = True
         self.unbuffer_thread_running = False
         self.unbuffer_queue = queue.Queue()
+        self.cv2_ref = None
 
     def enable(self, device, low_fps_mode=True):
+        import cv2  # do this so cv2 is treated as an optional dependency
+
+        self.cv2_ref = cv2
         logging.debug(f"Will enable the camera at device {device}.")
         self.device = device
-        self.capture = cv2.VideoCapture(self.device)
+        self.capture = self.cv2_ref.VideoCapture(self.device)
 
         if self.capture.isOpened():
             self.board.register_enabled(self)
             self._setup_low_fps_workaround(low_fps_mode)
-            width, height = self.capture.get(cv2.CAP_PROP_FRAME_WIDTH), self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            width, height = self.capture.get(self.cv2_ref.CAP_PROP_FRAME_WIDTH), self.capture.get(
+                self.cv2_ref.CAP_PROP_FRAME_HEIGHT
+            )
             logging.debug(f"Labrador Camera initialized with dimensions: height = {height} width = {width}")
             return True
 
@@ -41,7 +47,9 @@ class Camera:
             self.capture.release()
 
     def get_dimensions(self):
-        width, height = self.capture.get(cv2.CAP_PROP_FRAME_WIDTH), self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        width, height = self.capture.get(self.cv2_ref.CAP_PROP_FRAME_WIDTH), self.capture.get(
+            self.cv2_ref.CAP_PROP_FRAME_HEIGHT
+        )
         return height, width
 
     def read(self):
@@ -56,7 +64,7 @@ class Camera:
             logging.error("Error reading frame.")
             return False
 
-        cv2.imwrite(filename, frame)
+        self.cv2_ref.imwrite(filename, frame)
         return True
 
     def __del__(self):

@@ -1,19 +1,20 @@
-# caninos-sdk
+# Caninos SDK
 
-A ideia é fazer com que o uso dos periféricos da Labrador seja **muito acessível**, ao ponto de, um dia, permitir códigos assim:
+Estamos criando uma SDK para fazer com que o uso da Labrador fique **muito acessível**.
+O objetivo é permitir códigos assim:
 
 ```python
-import caninos_sdk as k9
-
 # as 4 linhas abaixo já funcionam:
+import caninos_sdk as k9
 labrador = k9.Labrador()
 labrador.pin15.enable_gpio(k9.Pin.Direction.OUTPUT, alias="led_status")
-labrador.pin2.enable_gpio(k9.Pin.Direction.INPUT, alias="button1")
 labrador.camera.enable()
 
-# as próximas 3 ainda não
+# as próximas 5 ainda não (precisa ser desenvolvido)
+labrador.pin2.enable_gpio(k9.Pin.Direction.INPUT, alias="button1")
 labrador.pin.enable_gpio(k9.cpu_pin(0x33), k9.INPUT, alias="button1")
 labrador.pin.enable_gpio(7, k9.I2C, address=0x4, alias="temp_sensor")
+labrador.pin.enable_gpio(9, k9.SPI, address=0x4, alias="temp_sensor")
 labrador.wifi.enable("CITI", "1cbe991a14")
 
 print(labrador.enabled_features())
@@ -27,32 +28,60 @@ ip = labrador.wifi.get_ip() # ainda não
 ok, frame = labrador.camera.read() # já funciona
 ```
 
+Caso queira ajudar com a implementação, dê uma olhadinha nos [issues](https://github.com/caninos-loucos/caninos-sdk/issues).
+
 # Começando
 
-Pode testar rodando um dos exemplos. Se for usar o gpio: `python3 examples/gpio_led.py`.
+## Piscando um LED - o Hello World do hardware
 
-Note que, para habilitar o uso das GPIOs sem `sudo`, precisa rodar esses comandos (por enquanto) toda vez que reinicia a placa:
+```python
+# importa a SDK e dá a ela um apelido bonitinho
+import caninos_sdk as k9
+
+# instancia o objeto labrador
+labrador = k9.Labrador()
+
+# habilita o pino 15 como saída, e dá a ele o apelido "led_status"
+labrador.pin15.enable_gpio(k9.Pin.Direction.OUTPUT, alias="led_status")
+
+# liga o "led_status"
+labrador.led_status.high()
+# desliga o "led_status"
+labrador.led_status.low()
+# liga o mesmo led de novo, porém agora se referindo a ele pelo número do pino
+labrador.pin15.high()
+```
+
+**⚠️ Atenção**: para usar as GPIOs sem `sudo`, é necessário rodar os comandos abaixo, toda vez que se reinicia a placa:
 
 ```bash
 sudo chown caninos /dev/gpiochip*
 sudo chmod g+rw /dev/gpiochip*
 ```
 
+## Outros exemplos
+
+Confira a pasta [examples](https://github.com/caninos-loucos/caninos-sdk/tree/main/examples) do repositório no GitHub.
+
+**⚠️ Atenção**: para usar a câmera, é necessário instalar o [OpenCV](https://linuxize.com/post/how-to-install-opencv-on-debian-10/). Instale-o com o comando abaixo:
+- `sudo apt install python3-opencv`
 
 # Contributing
 
-See: https://godatadriven.com/blog/a-practical-guide-to-setuptools-and-pyproject-toml/
+First, see the [issues](https://github.com/caninos-loucos/caninos-sdk/issues) page.
 
-Install dependencies:
+Then, install some dependencies:
+
 ```bash
 sudo apt install python3-dev python3-pip python3-setuptools libffi-dev libssl-dev curl
 pip3 install --upgrade pip
 ```
 
-To install the package locally in _editable_ form:
+Finally, install the package locally in _editable_ form:
 ```bash
 pip3 install -e .
 ```
+
 
 ## Publish a new version
 Install build deps: `pip3 install build twine`.
@@ -64,7 +93,7 @@ Update the version number at `__init__.py` and `setup.cfg`.
 python3 -m build
 
 # deploy
-twine upload -r testpypi dist/* # to https://test.pypi.org/
+twine upload -r testpypi dist/*.whl # to https://test.pypi.org/
 twine upload -r dist/*.whl # to https://pypi.org/
 ```
 
