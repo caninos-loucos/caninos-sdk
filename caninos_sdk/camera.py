@@ -7,6 +7,7 @@ class Camera:
         self.capture = None
         self.low_fps_mode = True
         self.unbuffer_thread_running = False
+        self.unbuffer_queue = queue.Queue()
 
     def enable(self, device, low_fps_mode=True):
         logging.debug(f"Will enable the camera at device {device}.")
@@ -30,7 +31,6 @@ class Camera:
         self.low_fps_mode = low_fps_mode
         if self.low_fps_mode:
             logging.debug("NOTE: using low fps mode! (will use extra thread+queue to discard buffered frames)")
-            self.q = queue.Queue()
             self.start_unbuffer_thread()
 
     def disable(self):
@@ -46,7 +46,7 @@ class Camera:
 
     def read(self):
         if self.low_fps_mode:
-            return True, self.q.get()
+            return True, self.unbuffer_queue.get()
         else:
             return self.capture.read()
 
@@ -85,10 +85,10 @@ class Camera:
             ret, frame = self.capture.read()
             if not ret:
                 break
-            if not self.q.empty():
+            if not self.unbuffer_queue.empty():
                 try:
-                    self.q.get_nowait()  # discard previous (unprocessed) frame
+                    self.unbuffer_queue.get_nowait()  # discard previous (unprocessed) frame
                 except queue.Empty:
                     pass
-            self.q.put(frame)
+            self.unbuffer_queue.put(frame)
         logging.debug("The thread to handle low FPS consumers has stopped.")

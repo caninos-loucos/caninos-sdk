@@ -12,6 +12,9 @@ def show(camera_id: int = 0):
     Este comando mostra o que a câmera está vendo, a 10 frames por segundo.
 
     O id da câmera pode ser configurado com a opção --camera-id
+
+    Exemplo:
+        python examples/camera_cmd.py show --camera-id 0
     """
     ret = labrador.camera.enable(camera_id)
     if not ret:
@@ -29,13 +32,16 @@ def show(camera_id: int = 0):
 
 
 @app.command()
-def save(filename: str, camera_id: int = 0):
+def save(filename: str = "frame.jpg", camera_id: int = 0):
     """
     Este comando lê uma imagem da câmera e salva em um arquivo.
 
     O nome do arquivo pode ser configurado com a opção --filename
 
     O id da câmera pode ser configurado com a opção --camera-id
+
+    Exemplo:
+        python examples/camera_cmd.py save --filename frame.jpg
     """
     ret = labrador.camera.enable(camera_id)
     if not ret:

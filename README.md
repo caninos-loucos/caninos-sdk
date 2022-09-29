@@ -57,9 +57,15 @@ pip3 install -e .
 ## Publish a new version
 Install build deps: `pip3 install build twine`.
 
+Update the version number at `__init__.py` and `setup.cfg`.
+
 ```bash
-twine upload -r testpypi dist/* # deploy to https://test.pypi.org/
-twine upload -r dist/* # deploy to https://pypi.org/
+# build the new version
+python3 -m build
+
+# deploy
+twine upload -r testpypi dist/* # to https://test.pypi.org/
+twine upload -r dist/*.whl # to https://pypi.org/
 ```
 
 
