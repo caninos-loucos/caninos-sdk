@@ -8,8 +8,8 @@ import gpiod
 # TODO: include information about allowed modes for each gpio
 gpio_mappings = {}
 gpio_mappings["64"] = {
-    # 36: ("A28", [GPIO.INPUT, GPIO.OUTPUT, GPIO.I2C]),
-    # 36: {"group": "A28", "allowed_modes": [GPIO.INPUT, GPIO.OUTPUT, GPIO.I2C]},
+    # 36: ("A28", [Pin.INPUT, Pin.OUTPUT, Pin.I2C]),
+    # 36: {"group": "A28", "allowed_modes": [Pin.INPUT, Pin.OUTPUT, Pin.I2C]},
     36: "A28",
     33: "B0",
     35: "B1",
@@ -63,8 +63,8 @@ gpio_mappings["32"] = {
 
 
 @dataclass
-class GPIO:
-    IO = 0
+class Pin:
+    GPIO = 0
     I2C = 1
     PWM = 2
     SPI = 3
@@ -83,54 +83,54 @@ class GPIO:
     pwm: any = field(default=None, repr=False)
 
     def __post_init__(self):
-        self.chip_id, self.line_id = GPIO.get_num(self.pin, self.board.board_version)
+        self.chip_id, self.line_id = Pin.get_num(self.pin, self.board.board_version)
 
-    def enable_io(self, direction, alias=""):
-        assert direction in [GPIO.Direction.INPUT, GPIO.Direction.OUTPUT]
-        self.mode = GPIO.IO
+    def enable_gpio(self, direction, alias=""):
+        assert direction in [Pin.Direction.INPUT, Pin.Direction.OUTPUT]
+        self.mode = Pin.GPIO
         self.alias = alias
         self.board.register_enabled(self)
-        self.gpiod_enable_io(direction)
+        self.gpiod_enable_gpio(direction)
 
     def enable_pwm(self, freq, duty_cycle, alias=""):
-        self.mode = GPIO.PWM
+        self.mode = Pin.PWM
         self.alias = alias
         self.board.register_enabled(self)
-        self.gpiod_enable_io(GPIO.Direction.OUTPUT)
+        self.gpiod_enable_gpio(Pin.Direction.OUTPUT)
         self.gpiod_enable_pwm(freq, duty_cycle)
 
     def gpiod_enable_pwm(self, freq, duty_cycle):
         self.pwm = PWM(self, freq, duty_cycle)
         logging.info(f"PWM enabled")
 
-    def gpiod_enable_io(self, direction):
+    def gpiod_enable_gpio(self, direction):
         if self.board.cpu_architecture == "x86_64":
-            logging.debug("Will not enable GPIO in PC.")
+            logging.debug("Will not enable Pin in PC.")
             return
         chip_device = gpiod.chip(f"/dev/gpiochip{self.chip_id}")
         self.gpiod_pin = chip_device.get_lines([self.line_id])
         config = gpiod.line_request()
         config.consumer = f"pin {self.pin}"
-        if direction == GPIO.Direction.INPUT:
+        if direction == Pin.Direction.INPUT:
             config.request_type = gpiod.line_request.DIRECTION_INPUT
-        elif direction == GPIO.Direction.OUTPUT:
+        elif direction == Pin.Direction.OUTPUT:
             config.request_type = gpiod.line_request.DIRECTION_OUTPUT
         self.gpiod_pin.request(config)
-        logging.info(f"GPIO {self.pin} enabled")
+        logging.info(f"Pin {self.pin} enabled")
 
     def high(self):
         if self.board.cpu_architecture == "x86_64":
-            logging.debug("Will not enable GPIO in PC.")
+            logging.debug("Will not enable Pin in PC.")
             return
-        if self.mode != GPIO.PWM:
+        if self.mode != Pin.PWM:
             logging.debug(f"Setting pin {self.pin} to high.")
         self.gpiod_pin.set_values([1])
 
     def low(self):
         if self.board.cpu_architecture == "x86_64":
-            logging.debug("Will not enable GPIO in PC.")
+            logging.debug("Will not enable Pin in PC.")
             return
-        if self.mode != GPIO.PWM:
+        if self.mode != Pin.PWM:
             logging.debug(f"Setting pin {self.pin} to low.")
         self.gpiod_pin.set_values([0])
 
@@ -145,7 +145,7 @@ class GPIO:
             logging.error(f"Invalid pin {pin}")
             return
         if board_bits == "32":
-            offset = GPIO.get_offset_32bits(group[0])
+            offset = Pin.get_offset_32bits(group[0])
             group_n = int(group[1:])
             return 0, offset + group_n
         elif board_bits == "64":
