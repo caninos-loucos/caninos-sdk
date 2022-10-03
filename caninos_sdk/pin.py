@@ -118,6 +118,13 @@ class Pin:
         self.gpiod_pin.request(config)
         logging.info(f"Pin {self.pin} enabled")
 
+    def write(self, value: int):
+        assert value in [0, 1]
+        if value == 0:
+            self.low()
+        else:
+            self.high()
+
     def high(self):
         if self.board.cpu_architecture == "x86_64":
             logging.debug(f"Skipping pin{self.pin} high in PC.")
