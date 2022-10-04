@@ -11,7 +11,7 @@ labrador.pin15.enable_gpio(k9.Pin.Direction.OUTPUT, alias="led_status")
 labrador.camera.enable()
 
 # as próximas 5 ainda não (precisa ser desenvolvido)
-labrador.pin2.enable_gpio(k9.Pin.Direction.INPUT, alias="button1")
+labrador.pin12.enable_gpio(k9.Pin.Direction.INPUT, alias="button1")
 labrador.pin.enable_gpio(k9.cpu_pin(0x33), k9.INPUT, alias="button1")
 labrador.pin.enable_gpio(7, k9.I2C, address=0x4, alias="temp_sensor")
 labrador.pin.enable_gpio(9, k9.SPI, address=0x4, alias="temp_sensor")

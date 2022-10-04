@@ -112,11 +112,19 @@ class Pin:
         config = gpiod.line_request()
         config.consumer = f"pin {self.pin}"
         if direction == Pin.Direction.INPUT:
-            config.request_type = gpiod.line_request.DIRECTION_INPUT
+            config.request_type = gpiod.line_request.EVENT_RISING_EDGE
         elif direction == Pin.Direction.OUTPUT:
             config.request_type = gpiod.line_request.DIRECTION_OUTPUT
         self.gpiod_pin.request(config)
         logging.info(f"Pin {self.pin} enabled")
+
+    def read(self):
+        if self.board.cpu_architecture == "x86_64":
+            logging.debug(f"Skipping read of pin{self.pin} in PC.")
+            return
+        if self.mode != Pin.PWM:
+            logging.debug(f"Reading pin {self.pin}.")
+        return self.gpiod_pin.get_values()[0]
 
     def write(self, value: int):
         assert value in [0, 1]
