@@ -8,21 +8,21 @@ O objetivo é permitir códigos assim:
 import caninos_sdk as k9
 labrador = k9.Labrador()
 labrador.pin15.enable_gpio(k9.Pin.Direction.OUTPUT, alias="led_status")
+labrador.pin19.enable_gpio(k9.Pin.Direction.INPUT, alias="button1")
 labrador.camera.enable()
 
 # as próximas 5 ainda não (precisa ser desenvolvido)
-labrador.pin12.enable_gpio(k9.Pin.Direction.INPUT, alias="button1")
 labrador.pin.enable_gpio(k9.cpu_pin(0x33), k9.INPUT, alias="button1")
-labrador.pin.enable_gpio(7, k9.I2C, address=0x4, alias="temp_sensor")
-labrador.pin.enable_gpio(9, k9.SPI, address=0x4, alias="temp_sensor")
+labrador.pin.enable_gpio(7, k9.I2C, address=0x4, alias="temp_sensor1")
+labrador.pin.enable_gpio(9, k9.SPI, address=0x4, alias="temp_sensor2")
 labrador.wifi.enable("CITI", "1cbe991a14")
 
 print(labrador.enabled_features())
 
 # uso
 labrador.led_status.high() # já funciona
-res = labrador.button1.read() # ainda não
-value = labrador.temp_sensor.read() # ainda não
+res = labrador.button1.read() # já funciona
+value = labrador.temp_sensor1.read() # ainda não
 
 ip = labrador.wifi.get_ip() # ainda não
 ok, frame = labrador.camera.read() # já funciona
