@@ -32,6 +32,13 @@ Caso queira ajudar com a implementação, dê uma olhadinha nos [issues](https:/
 
 # Começando
 
+**⚠️ Atenção**: para usar as GPIOs sem `sudo`, é necessário fazer a configuração abaixo uma única vez (será mantido quando reiniciar a placa):
+
+```bash
+sudo chmod +x ./gpio-config.sh
+sudo ./gpio-config.sh
+```
+
 ## Piscando um LED - o Hello World do hardware
 
 ```python
@@ -50,13 +57,6 @@ labrador.led_status.high()
 labrador.led_status.low()
 # liga o mesmo led de novo, porém agora se referindo a ele pelo número do pino
 labrador.pin15.high()
-```
-
-**⚠️ Atenção**: para usar as GPIOs sem `sudo`, é necessário rodar os comandos abaixo, toda vez que se reinicia a placa:
-
-```bash
-sudo chown caninos /dev/gpiochip*
-sudo chmod g+rw /dev/gpiochip*
 ```
 
 ## Outros exemplos
