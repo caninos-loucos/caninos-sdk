@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from caninos_sdk.pwm import PWM
 import logging, platform, serial, glob
 
+# XXX: module under development
+
 
 @dataclass
 class Serial:

@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from caninos_sdk.pwm import PWM
 import logging, platform, glob
 
+
+# XXX: module under development
 # instalar essa biblioteca: https://github.com/amaork/libi2c
 
 

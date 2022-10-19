@@ -86,15 +86,15 @@ pip3 install -e .
 ## Publish a new version
 Install build deps: `pip3 install build twine`.
 
-Update the version number at `__init__.py` and `setup.cfg`.
+Update the version number at `__init__.py`.
 
 ```bash
 # build the new version
 python3 -m build
 
 # deploy
-twine upload -r testpypi dist/*.whl # to https://test.pypi.org/
-twine upload -r dist/*.whl # to https://pypi.org/
+VERSION=$(grep -r "__version__" caninos_sdk/__init__.py | sed -E 's/.* = "(.*)"/\1/g')
+twine upload dist/caninos_sdk-$VERSION-py3-none-any.whl  --config-file ${HOME}/.pypirc
 ```
 
 

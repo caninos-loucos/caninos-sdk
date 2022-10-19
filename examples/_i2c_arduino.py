@@ -1,5 +1,7 @@
 import caninos_sdk as k9
 
+# XXX: module under development
+
 labrador = k9.Labrador()
 labrador.i2c.enable(port="/dev/i2c-2", address=0x4, alias="arduino_i2c")
 
