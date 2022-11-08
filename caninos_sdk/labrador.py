@@ -3,6 +3,7 @@ from typing import List
 from caninos_sdk.pin import Pin, gpio_mappings
 from caninos_sdk.pwm import PWM
 from caninos_sdk.camera import Camera
+from caninos_sdk.i2c import I2C
 import logging, platform, time
 
 
@@ -23,6 +24,7 @@ class Labrador:
         self.board_version = platform.architecture()[0][:2]
         self.kernel_version = platform.release()
         self.camera = Camera(self)
+        self.i2c = I2C(self)
         self._load_pins()
 
     def _load_pins(self):
