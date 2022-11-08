@@ -4,16 +4,16 @@ Estamos criando uma SDK para fazer com que o uso da Labrador fique **muito acess
 O objetivo é permitir códigos assim:
 
 ```python
-# as 4 linhas abaixo já funcionam:
+# as linhas abaixo já funcionam:
 import caninos_sdk as k9
 labrador = k9.Labrador()
 labrador.pin15.enable_gpio(k9.Pin.Direction.OUTPUT, alias="led_status")
 labrador.pin19.enable_gpio(k9.Pin.Direction.INPUT, alias="button1")
+labrador.i2c.add_device("arduino_i2c", 4)
 labrador.camera.enable()
 
-# as próximas 5 ainda não (precisa ser desenvolvido)
+# as próximas ainda não (precisa ser desenvolvido)
 labrador.pin.enable_gpio(k9.cpu_pin(0x33), k9.INPUT, alias="button1")
-labrador.pin.enable_gpio(7, k9.I2C, address=0x4, alias="temp_sensor1")
 labrador.pin.enable_gpio(9, k9.SPI, address=0x4, alias="temp_sensor2")
 labrador.wifi.enable("CITI", "1cbe991a14")
 
@@ -22,6 +22,7 @@ print(labrador.enabled_features())
 # uso
 labrador.led_status.high() # já funciona
 res = labrador.button1.read() # já funciona
+res = labrador.arduino_i2c.read(2) # já funciona
 value = labrador.temp_sensor1.read() # ainda não
 
 ip = labrador.wifi.get_ip() # ainda não
@@ -30,7 +31,17 @@ ok, frame = labrador.camera.read() # já funciona
 
 Caso queira ajudar com a implementação, dê uma olhadinha nos [issues](https://github.com/caninos-loucos/caninos-sdk/issues).
 
-# Começando
+# Instalação
+
+Instale a Caninos SDK com o seguinte comando:
+- `pip3 install caninos-sdk`
+
+⚠️ Caso apareça o erro "pip not installed", isso quer dizer que sua Labrador ainda não tem o comando `pip3`. Instale-o com o comando a seguir, e depois tente de novo.
+- `sudo apt install python3-dev python3-pip python3-setuptools `
+
+# Exemplo
+
+Para testar a SDK vamos piscar um LED -- o _hello world_ do hardware :)
 
 **⚠️ Atenção**: para usar as GPIOs sem `sudo`, é necessário fazer a configuração abaixo uma única vez (será mantido quando reiniciar a placa):
 
@@ -39,7 +50,7 @@ sudo chmod +x ./gpio-config.sh
 sudo ./gpio-config.sh
 ```
 
-## Piscando um LED - o Hello World do hardware
+Abra um terminal, digite `python`, e vá inserindo os comandos abaixo, um de cada vez:
 
 ```python
 # importa a SDK e dá a ela um apelido bonitinho
@@ -55,16 +66,24 @@ labrador.pin15.enable_gpio(k9.Pin.Direction.OUTPUT, alias="led_status")
 labrador.led_status.high()
 # desliga o "led_status"
 labrador.led_status.low()
-# liga o mesmo led de novo, porém agora se referindo a ele pelo número do pino
-labrador.pin15.high()
 ```
 
 ## Outros exemplos
 
 Confira a pasta [examples](https://github.com/caninos-loucos/caninos-sdk/tree/main/examples) do repositório no GitHub.
 
-**⚠️ Atenção**: para usar a câmera, é necessário instalar o [OpenCV](https://linuxize.com/post/how-to-install-opencv-on-debian-10/). Instale-o com o comando abaixo:
-- `sudo apt install python3-opencv`
+### Câmera
+Para usar a câmera, é necessário instalar o [OpenCV](https://linuxize.com/post/how-to-install-opencv-on-debian-10/). Instale-o com o comando abaixo:
+```bash
+sudo apt install python3-opencv
+```
+
+### I2C
+Para usar o I2C, é necessário instalar a [pylibi2c](https://github.com/amaork/libi2c). Instale-a com os comandos abaixo:
+```bash
+git clone https://github.com/amaork/libi2c.git
+cd libi2c && pip3 install .
+```
 
 # Contributing
 
@@ -107,9 +126,11 @@ twine upload dist/caninos_sdk-$VERSION-py3-none-any.whl  --config-file ${HOME}/.
 - [-] write unit tests -> works with `pytest -s`
 - [x] gpio read/write work across Labradors 32/64
 - [x] support pwm
-- [ ] support i2c
+- [x] support i2c
+- [-] support serial
 - [ ] support spi
 - [ ] support wifi
+- [ ] support bluetooth
 - [x] support camera
 
 Other notes:
