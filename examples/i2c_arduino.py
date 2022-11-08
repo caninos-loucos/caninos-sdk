@@ -1,7 +1,7 @@
 import caninos_sdk as k9
 
 labrador = k9.Labrador()
-labrador.i2c.enable(4, alias="arduino_i2c")
+labrador.i2c.add_device("arduino_i2c", 4)
 
 ret = labrador.arduino_i2c.write(b"dados importantes")
 print(ret)
