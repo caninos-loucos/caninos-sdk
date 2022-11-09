@@ -43,14 +43,9 @@ Instale a Caninos SDK com o seguinte comando:
 
 Para testar a SDK vamos piscar um LED -- o _hello world_ do hardware :)
 
-**⚠️ Atenção**: para usar as GPIOs sem `sudo`, é necessário fazer a configuração abaixo uma única vez (será mantido quando reiniciar a placa):
+⚠️ Para começar, habilite os GPIOs conforme a seção [Habilitando periféricos](#habilitando-periféricos).
 
-```bash
-sudo chmod +x ./gpio-config.sh
-sudo ./gpio-config.sh
-```
-
-Abra um terminal, digite `python`, e vá inserindo os comandos abaixo, um de cada vez:
+Agora abra um terminal, digite `python3`, e vá inserindo os comandos abaixo, um de cada vez:
 
 ```python
 # importa a SDK e dá a ela um apelido bonitinho
@@ -68,9 +63,18 @@ labrador.led_status.high()
 labrador.led_status.low()
 ```
 
-## Outros exemplos
+Para mais exemplos de uso, confira a pasta [examples](https://github.com/caninos-loucos/caninos-sdk/tree/main/examples) do repositório no GitHub.
 
-Confira a pasta [examples](https://github.com/caninos-loucos/caninos-sdk/tree/main/examples) do repositório no GitHub.
+# Habilitando periféricos
+Cada periférico da Labrador requer algum tipo de configuração, a qual geralmente só precisa ser feita uma vez. Confira nas instruções abaixo.
+
+### GPIO
+Para usar as GPIOs (sem `sudo`), é necessário fazer a configuração abaixo uma única vez (será mantido quando reiniciar a placa):
+
+```bash
+sudo chmod +x ./gpio-config.sh
+sudo ./gpio-config.sh
+```
 
 ### Câmera
 Para usar a câmera, é necessário instalar o [OpenCV](https://linuxize.com/post/how-to-install-opencv-on-debian-10/). Instale-o com o comando abaixo:
@@ -85,18 +89,26 @@ git clone https://github.com/amaork/libi2c.git
 cd libi2c && pip3 install .
 ```
 
+### Serial
+Para usar a serial, sem sudo, é necessário adicionar o usuário `caninos` ao grupo `dialout`. Faça isso com o comandos abaixo:
+```bash
+sudo usermod -aG dialout caninos
+```
+
+
 # Contributing
 
-First, see the [issues](https://github.com/caninos-loucos/caninos-sdk/issues) page.
+Pull requests are welcome! Also, see the [issues](https://github.com/caninos-loucos/caninos-sdk/issues).
 
-Then, install some dependencies:
+To develop the Caninos SDK, install some dependencies:
 
 ```bash
 sudo apt install python3-dev python3-pip python3-setuptools libffi-dev libssl-dev curl
 pip3 install --upgrade pip
+pip3 install build twine
 ```
 
-Finally, install the package locally in _editable_ form:
+Also, install the package locally in _editable_ form:
 ```bash
 pip3 install -e .
 ```
@@ -127,8 +139,9 @@ twine upload dist/caninos_sdk-$VERSION-py3-none-any.whl  --config-file ${HOME}/.
 - [x] gpio read/write work across Labradors 32/64
 - [x] support pwm
 - [x] support i2c
-- [-] support serial
+- [ ] support serial
 - [ ] support spi
+- [ ] support analog pins
 - [ ] support wifi
 - [ ] support bluetooth
 - [x] support camera
