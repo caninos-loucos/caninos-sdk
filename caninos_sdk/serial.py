@@ -11,7 +11,7 @@ class Serial:
 
     def enable(self, alias, **kwargs):
         self.alias = alias
-        self.pyserial_handle = serial.Serial(caninos_sdk.SERIAL_USB, **kwargs)
+        self.pyserial_handle = serial.Serial(self.default_port, **kwargs)
         self.board.register_enabled(self)
 
     def disable(self):
