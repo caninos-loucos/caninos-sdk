@@ -42,3 +42,4 @@ class PWM:
                     self.gpio.high()
                     state = True
                     start = timeit.default_timer()
+        self.gpio.low()
