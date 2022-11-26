@@ -6,7 +6,7 @@ logging.basicConfig(
     datefmt="[%Y-%m-%d,%H:%M:%S]",
 )
 
-__version__ = "0.2.10"
+__version__ = "0.3.0"
 
 from caninos_sdk.labrador import Labrador
 from caninos_sdk.pin import Pin
