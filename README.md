@@ -39,18 +39,18 @@ Instale a Caninos SDK com o seguinte comando:
 ⚠️ Caso apareça o erro "pip not installed", isso quer dizer que sua Labrador ainda não tem o comando `pip3`. Instale-o com o comando a seguir, e depois tente de novo.
 - `sudo apt install python3-dev python3-pip python3-setuptools `
 
+Por fim, configure as permissões do GPIO, I2C e Serial, para que não precise usar `sudo`:
+
+```bash
+sudo chmod +x ./setup-periph-permissions.sh
+sudo ./setup-periph-permissions.sh
+```
+
 # Exemplo
 
 Para testar a SDK vamos piscar um LED -- o _hello world_ do hardware :)
 
-**⚠️ Atenção**: para usar as GPIOs sem `sudo`, é necessário fazer a configuração abaixo uma única vez (será mantido quando reiniciar a placa):
-
-```bash
-sudo chmod +x ./gpio-config.sh
-sudo ./gpio-config.sh
-```
-
-Abra um terminal, digite `python`, e vá inserindo os comandos abaixo, um de cada vez:
+Abra um terminal, digite `python3`, e vá inserindo os comandos abaixo, um de cada vez:
 
 ```python
 # importa a SDK e dá a ela um apelido bonitinho
@@ -127,13 +127,13 @@ twine upload dist/caninos_sdk-$VERSION-py3-none-any.whl  --config-file ${HOME}/.
 - [x] gpio read/write work across Labradors 32/64
 - [x] support pwm
 - [x] support i2c
-- [-] support serial
+- [x] support serial
+- [x] support camera
 - [ ] support spi
 - [ ] support wifi
 - [ ] support bluetooth
-- [x] support camera
 
 Other notes:
 - should this library support other SBCs?
 - should the docs be in English or Portuguese?
-- need to get funding or community help
+- get funding or community help
