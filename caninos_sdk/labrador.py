@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
-from typing import List
 from caninos_sdk.pin import Pin, gpio_mappings
-from caninos_sdk.pwm import PWM
 from caninos_sdk.camera import Camera
-import logging, platform, time
+from caninos_sdk.i2c import I2CFactory
+from caninos_sdk.serial import Serial
+import logging, platform, caninos_sdk
 
 
 @dataclass
@@ -23,6 +23,9 @@ class Labrador:
         self.board_version = platform.architecture()[0][:2]
         self.kernel_version = platform.release()
         self.camera = Camera(self)
+        self.i2c = I2CFactory(self)
+        self.serial_usb = Serial(self, caninos_sdk.SERIAL_USB)
+        self.serial_header40pins = Serial(self, caninos_sdk.SERIAL_HEADER_40_PINS)
         self._load_pins()
 
     def _load_pins(self):
@@ -33,3 +36,7 @@ class Labrador:
         self.enabled_features.append(periph)
         if hasattr(periph, "alias"):
             setattr(self, f"{periph.alias}", periph)
+
+    def register_disabled(self, periph):
+        # TODO
+        pass
