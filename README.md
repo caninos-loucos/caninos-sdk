@@ -113,8 +113,10 @@ python3 -m build
 
 # deploy
 VERSION=$(grep -r "__version__" caninos_sdk/__init__.py | sed -E 's/.* = "(.*)"/\1/g')
-twine upload dist/caninos_sdk-$VERSION-py3-none-any.whl  --config-file ${HOME}/.pypirc
+python3 -m twine upload dist/caninos_sdk-$VERSION-py3-none-any.whl  --config-file ${HOME}/.pypirc
 ```
+
+Note: twine requires a config file, see how to configure it [here](https://truveris.github.io/articles/configuring-pypirc/).
 
 
 ## TO-DO:

@@ -6,7 +6,7 @@ logging.basicConfig(
     datefmt="[%Y-%m-%d,%H:%M:%S]",
 )
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 SERIAL_USB = "/dev/ttyUSB0"
 SERIAL_HEADER_40_PINS = "/dev/ttyS0"
 
