@@ -78,12 +78,6 @@ Para usar a câmera, é necessário instalar o [OpenCV](https://linuxize.com/pos
 sudo apt install python3-opencv
 ```
 
-### I2C
-Para usar o I2C, é necessário instalar a [pylibi2c](https://github.com/amaork/libi2c). Instale-a com os comandos abaixo:
-```bash
-git clone https://github.com/amaork/libi2c.git
-cd libi2c && pip3 install .
-```
 
 # Contributing
 
